@@ -1,0 +1,245 @@
+,persona.region,persona.sex,persona.age,persona.country,persona.marital_status,persona.education,persona.social_class,question.id,question.variant,response.id,response.answer
+0,Mississippi,female,30,United States,married,middle,lower middle class,Q221,0,4,2
+1,Michigan,male,60,United States,married,higher,working class,Q221,0,4,2
+2,Ohio,female,39,United States,married,higher,lower middle class,Q221,0,4,2
+3,Iowa,male,33,United States,married,higher,working class,Q221,0,4,2
+4,New Jersey,female,45,United States,married,higher,lower middle class,Q221,0,4,2
+5,North Carolina,male,42,United States,married,middle,lower middle class,Q221,0,4,2
+6,California,male,28,United States,single,middle,lower middle class,Q221,0,4,2
+7,California,male,30,United States,divorced,middle,lower middle class,Q221,0,4,2
+8,Iowa,female,19,United States,single,middle,lower middle class,Q221,0,4,2
+9,Idaho,male,31,United States,married,middle,lower middle class,Q221,0,4,2
+10,Utah,female,32,United States,married,middle,lower middle class,Q221,0,4,2
+11,North Carolina,male,53,United States,married,middle,lower middle class,Q221,0,4,2
+12,North Carolina,male,38,United States,married,higher,working class,Q221,0,4,2
+13,Tennessee,female,35,United States,married,middle,lower middle class,Q221,0,4,2
+14,Nebraska,female,57,United States,married,lower,working class,Q221,0,4,2
+15,Missouri,female,49,United States,single,higher,upper middle class,Q221,0,4,2
+16,Indiana,female,35,United States,married,higher,lower middle class,Q221,0,4,2
+17,California,male,24,United States,single,higher,upper middle class,Q221,0,4,2
+18,Florida,female,23,United States,single,higher,lower middle class,Q221,0,4,2
+19,South Dakota,male,55,United States,married,middle,lower middle class,Q221,0,4,2
+20,New Jersey,male,57,United States,married,middle,upper middle class,Q221,0,4,2
+21,Washington,female,29,United States,married,middle,upper middle class,Q221,0,4,2
+22,Pennsylvania,female,46,United States,married,middle,lower middle class,Q221,0,4,2
+23,Nebraska,female,20,United States,single,middle,lower middle class,Q221,0,4,2
+24,North Carolina,male,19,United States,single,middle,lower middle class,Q221,0,4,2
+25,Minnesota,female,33,United States,married,higher,lower middle class,Q221,0,4,2
+26,Wisconsin,male,41,United States,married,middle,working class,Q221,0,4,2
+27,Oklahoma,female,39,United States,divorced,middle,working class,Q221,0,4,2
+28,Wisconsin,female,55,United States,married,middle,working class,Q221,0,4,2
+29,Pennsylvania,male,58,United States,married,middle,lower middle class,Q221,0,4,2
+30,Georgia,female,29,United States,married,higher,lower middle class,Q221,0,4,2
+31,New York,male,38,United States,married,higher,lower middle class,Q221,0,4,2
+32,Wisconsin,male,38,United States,married,higher,upper middle class,Q221,0,4,2
+33,Arizona,male,59,United States,married,middle,lower middle class,Q221,0,4,2
+34,New York,female,30,United States,married,higher,upper middle class,Q221,0,4,2
+35,Wisconsin,female,31,United States,married,higher,lower middle class,Q221,0,4,2
+36,Colorado,male,59,United States,married,higher,upper middle class,Q221,0,4,2
+37,Georgia,male,27,United States,single,middle,working class,Q221,0,4,2
+38,Tennessee,female,25,United States,single,higher,working class,Q221,0,4,2
+39,Missouri,male,58,United States,married,higher,working class,Q221,0,4,2
+40,Utah,female,40,United States,married,higher,working class,Q221,0,4,2
+41,Missouri,female,36,United States,married,middle,upper middle class,Q221,0,4,2
+42,Florida,male,40,United States,married,middle,lower middle class,Q221,0,4,2
+43,Louisiana,female,30,United States,married,middle,lower class,Q221,0,4,3
+44,Kentucky,male,58,United States,married,higher,lower middle class,Q221,0,4,2
+45,Michigan,female,40,United States,married,higher,upper middle class,Q221,0,4,2
+46,Vermont,female,33,United States,married,middle,lower middle class,Q221,0,4,2
+47,Minnesota,female,37,United States,married,middle,lower middle class,Q221,0,4,2
+48,North Carolina,male,28,United States,married,middle,lower middle class,Q221,0,4,2
+49,Florida,male,53,United States,married,higher,working class,Q221,0,4,2
+50,Pennsylvania,male,52,United States,married,middle,upper middle class,Q221,0,4,2
+51,New York,male,22,United States,single,higher,lower middle class,Q221,0,4,2
+52,Illinois,female,57,United States,divorced,middle,lower middle class,Q221,0,4,2
+53,Tennessee,female,42,United States,married,middle,working class,Q221,0,4,2
+54,Tennessee,female,28,United States,married,higher,upper middle class,Q221,0,4,2
+55,New Jersey,female,39,United States,married,middle,lower middle class,Q221,0,4,2
+56,Florida,male,19,United States,single,middle,working class,Q221,0,4,2
+57,Michigan,female,54,United States,married,middle,working class,Q221,0,4,2
+58,Kansas,male,30,United States,married,higher,working class,Q221,0,4,2
+59,Arizona,female,41,United States,married,middle,lower middle class,Q221,0,4,2
+60,Texas,male,54,United States,married,higher,lower middle class,Q221,0,4,2
+61,Florida,male,65,United States,married,middle,upper middle class,Q221,0,4,2
+62,Connecticut,female,52,United States,married,middle,upper middle class,Q221,0,4,2
+63,Connecticut,male,26,United States,single,higher,lower middle class,Q221,0,4,2
+64,Iowa,male,32,United States,married,middle,working class,Q221,0,4,2
+65,Florida,male,38,United States,married,middle,lower middle class,Q221,0,4,2
+66,Virginia,male,58,United States,married,higher,upper middle class,Q221,0,4,2
+67,New Mexico,male,49,United States,married,middle,lower middle class,Q221,0,4,2
+68,Texas,female,29,United States,married,middle,working class,Q221,0,4,2
+69,Hawaii,female,36,United States,married,higher,lower middle class,Q221,0,4,2
+70,North Carolina,female,34,United States,married,middle,lower middle class,Q221,0,4,2
+71,Alabama,male,60,United States,married,middle,lower middle class,Q221,0,4,2
+72,Kentucky,male,21,United States,single,middle,lower middle class,Q221,0,4,2
+73,Florida,male,33,United States,single,higher,working class,Q221,0,4,2
+74,Tennessee,male,32,United States,married,higher,lower middle class,Q221,0,4,2
+75,Washington,male,42,United States,married,higher,upper middle class,Q221,0,4,2
+76,Kentucky,male,52,United States,married,middle,working class,Q221,0,4,2
+77,Virginia,male,45,United States,divorced,higher,upper middle class,Q221,0,4,2
+78,Texas,male,23,United States,single,middle,lower class,Q221,0,4,3
+79,New York,male,38,United States,single,higher,lower class,Q221,0,4,2
+80,Kentucky,female,37,United States,married,middle,working class,Q221,0,4,2
+81,Missouri,female,34,United States,married,middle,lower class,Q221,0,4,3
+82,Pennsylvania,female,30,United States,divorced,lower,lower class,Q221,0,4,3
+83,Arizona,male,38,United States,married,middle,working class,Q221,0,4,2
+84,Kentucky,female,30,United States,married,higher,lower class,Q221,0,4,2
+85,Pennsylvania,female,35,United States,married,middle,working class,Q221,0,4,2
+86,Maine,male,52,United States,married,middle,lower class,Q221,0,4,2
+87,Wisconsin,female,41,United States,single,middle,lower class,Q221,0,4,2
+88,Washington,female,21,United States,single,middle,lower class,Q221,0,4,3
+89,Michigan,female,35,United States,married,middle,lower class,Q221,0,4,2
+90,Massachusetts,male,34,United States,married,higher,working class,Q221,0,4,2
+91,Ohio,female,56,United States,divorced,middle,working class,Q221,0,4,2
+92,Montana,male,48,United States,married,higher,working class,Q221,0,4,2
+93,Louisiana,female,30,United States,married,middle,working class,Q221,0,4,2
+94,Florida,male,19,United States,single,middle,lower class,Q221,0,4,3
+95,Illinois,male,45,United States,married,middle,lower middle class,Q221,0,4,2
+96,Texas,male,23,United States,single,higher,lower class,Q221,0,4,2
+97,New York,female,28,United States,married,middle,working class,Q221,0,4,2
+98,North Carolina,male,34,United States,single,higher,working class,Q221,0,4,2
+99,Missouri,male,30,United States,married,higher,lower middle class,Q221,0,4,2
+100,California,female,49,United States,married,higher,lower middle class,Q221,0,4,2
+101,Washington,male,25,United States,single,middle,lower middle class,Q221,0,4,2
+102,Arizona,male,59,United States,married,higher,lower middle class,Q221,0,4,2
+103,Wisconsin,female,38,United States,married,middle,working class,Q221,0,4,2
+104,Florida,male,35,United States,married,higher,lower middle class,Q221,0,4,2
+105,North Carolina,male,49,United States,married,middle,lower class,Q221,0,4,3
+106,Missouri,male,37,United States,married,middle,lower class,Q221,0,4,2
+107,Minnesota,female,22,United States,single,middle,lower class,Q221,0,4,2
+108,Oklahoma,female,25,United States,married,middle,lower class,Q221,0,4,2
+109,Arizona,male,28,United States,single,higher,working class,Q221,0,4,2
+110,New Jersey,male,55,United States,married,middle,working class,Q221,0,4,2
+111,Texas,male,53,United States,married,higher,lower middle class,Q221,0,4,2
+112,Connecticut,male,59,United States,married,middle,working class,Q221,0,4,2
+113,Oregon,female,42,United States,married,middle,lower middle class,Q221,0,4,2
+114,Colorado,male,39,United States,married,higher,working class,Q221,0,4,2
+115,Arizona,male,34,United States,married,middle,lower middle class,Q221,0,4,2
+116,Texas,male,22,United States,single,higher,working class,Q221,0,4,2
+117,Michigan,male,21,United States,single,middle,working class,Q221,0,4,2
+118,Arizona,male,36,United States,married,higher,working class,Q221,0,4,2
+119,Texas,female,52,United States,married,higher,lower middle class,Q221,0,4,2
+120,North Carolina,male,52,United States,married,higher,lower middle class,Q221,0,4,2
+121,Massachusetts,male,39,United States,married,middle,lower class,Q221,0,4,2
+122,Idaho,male,23,United States,single,middle,lower middle class,Q221,0,4,2
+123,Wisconsin,female,24,United States,single,higher,lower middle class,Q221,0,4,2
+124,Colorado,female,71,United States,married,higher,upper middle class,Q221,0,4,2
+125,Texas,male,64,United States,married,higher,lower middle class,Q221,0,4,2
+126,Ohio,female,29,United States,married,middle,lower class,Q221,0,4,3
+127,Arizona,female,40,United States,married,middle,upper middle class,Q221,0,4,2
+128,Tennessee,male,37,United States,married,higher,lower middle class,Q221,0,4,2
+129,Arizona,male,34,United States,single,middle,lower middle class,Q221,0,4,2
+130,New York,female,32,United States,married,middle,working class,Q221,0,4,2
+131,Missouri,female,35,United States,married,middle,upper middle class,Q221,0,4,2
+132,Minnesota,male,33,United States,married,middle,upper middle class,Q221,0,4,2
+133,Virginia,female,45,United States,married,middle,upper middle class,Q221,0,4,2
+134,Illinois,male,30,United States,married,middle,upper middle class,Q221,0,4,2
+135,Texas,female,63,United States,married,higher,lower middle class,Q221,0,4,2
+136,Oklahoma,male,20,United States,single,middle,upper middle class,Q221,0,4,2
+137,Washington,male,45,United States,married,middle,upper middle class,Q221,0,4,2
+138,Pennsylvania,female,43,United States,married,higher,upper middle class,Q221,0,4,2
+139,Arizona,female,20,United States,single,middle,upper middle class,Q221,0,4,2
+140,Connecticut,female,40,United States,single,middle,lower middle class,Q221,0,4,2
+141,Illinois,female,33,United States,married,higher,upper middle class,Q221,0,4,2
+142,Ohio,female,24,United States,married,middle,working class,Q221,0,4,2
+143,Mississippi,female,53,United States,widowed,middle,working class,Q221,0,4,2
+144,New York,female,30,United States,single,middle,lower middle class,Q221,0,4,2
+145,Michigan,male,53,United States,married,higher,upper middle class,Q221,0,4,2
+146,Texas,male,28,United States,married,middle,working class,Q221,0,4,2
+147,Pennsylvania,female,38,United States,married,middle,upper middle class,Q221,0,4,2
+148,Nebraska,male,27,United States,single,higher,upper middle class,Q221,0,4,2
+149,Indiana,female,35,United States,married,higher,upper middle class,Q221,0,4,2
+150,Indiana,female,37,United States,married,higher,upper middle class,Q221,0,4,2
+151,Tennessee,male,43,United States,married,middle,lower middle class,Q221,0,4,2
+152,Minnesota,male,28,United States,single,higher,lower middle class,Q221,0,4,2
+153,Nebraska,male,39,United States,married,middle,lower middle class,Q221,0,4,2
+154,Louisiana,male,25,United States,married,middle,upper middle class,Q221,0,4,2
+155,Texas,male,33,United States,married,higher,lower middle class,Q221,0,4,2
+156,Nevada,female,45,United States,married,middle,lower middle class,Q221,0,4,2
+157,Kentucky,female,55,United States,married,middle,upper middle class,Q221,0,4,2
+158,Ohio,female,27,United States,married,higher,upper middle class,Q221,0,4,2
+159,Massachusetts,female,42,United States,married,higher,upper middle class,Q221,0,4,2
+160,Colorado,female,32,United States,married,middle,upper middle class,Q221,0,4,2
+161,Colorado,male,27,United States,married,higher,upper middle class,Q221,0,4,2
+162,Missouri,female,27,United States,married,higher,lower middle class,Q221,0,4,2
+163,Texas,female,37,United States,married,middle,upper middle class,Q221,0,4,2
+164,Ohio,male,28,United States,married,higher,working class,Q221,0,4,2
+165,Utah,female,50,United States,married,middle,upper middle class,Q221,0,4,2
+166,Tennessee,male,39,United States,single,higher,working class,Q221,0,4,2
+167,Kentucky,female,45,United States,married,higher,upper middle class,Q221,0,4,2
+168,Michigan,male,35,United States,married,higher,upper middle class,Q221,0,4,2
+169,Maine,female,55,United States,married,middle,lower middle class,Q221,0,4,2
+170,Missouri,female,27,United States,married,middle,lower middle class,Q221,0,4,2
+171,Missouri,female,52,United States,married,middle,lower middle class,Q221,0,4,2
+172,New Jersey,female,20,United States,single,middle,working class,Q221,0,4,2
+173,Virginia,male,60,United States,married,middle,working class,Q221,0,4,2
+174,Florida,male,41,United States,married,higher,upper middle class,Q221,0,4,1
+175,California,female,23,United States,married,middle,lower middle class,Q221,0,4,2
+176,Florida,female,48,United States,married,middle,lower middle class,Q221,0,4,2
+177,Washington,male,34,United States,married,higher,upper middle class,Q221,0,4,2
+178,Missouri,female,39,United States,divorced,middle,lower middle class,Q221,0,4,2
+179,Delaware,male,39,United States,married,middle,upper middle class,Q221,0,4,2
+180,Wisconsin,male,62,United States,married,middle,working class,Q221,0,4,2
+181,Tennessee,male,33,United States,married,middle,working class,Q221,0,4,2
+182,Texas,male,62,United States,married,higher,lower middle class,Q221,0,4,2
+183,Oklahoma,female,42,United States,married,higher,working class,Q221,0,4,2
+184,Indiana,female,50,United States,married,middle,lower middle class,Q221,0,4,2
+185,Nebraska,male,29,United States,married,higher,lower middle class,Q221,0,4,2
+186,North Carolina,male,35,United States,married,higher,working class,Q221,0,4,2
+187,Rhode Island,female,40,United States,married,middle,working class,Q221,0,4,2
+188,New York,female,48,United States,divorced,lower,working class,Q221,0,4,2
+189,Missouri,male,46,United States,married,middle,working class,Q221,0,4,2
+190,Indiana,male,47,United States,married,higher,lower middle class,Q221,0,4,2
+191,Iowa,female,38,United States,married,higher,working class,Q221,0,4,2
+192,Ohio,male,58,United States,married,middle,working class,Q221,0,4,2
+193,New Hampshire,female,48,United States,married,middle,upper middle class,Q221,0,4,2
+194,Ohio,female,19,United States,single,middle,working class,Q221,0,4,2
+195,New York,female,38,United States,married,higher,lower middle class,Q221,0,4,2
+196,Michigan,female,34,United States,divorced,higher,lower class,Q221,0,4,2
+197,Kansas,male,20,United States,single,higher,working class,Q221,0,4,2
+198,North Carolina,female,33,United States,married,middle,working class,Q221,0,4,2
+199,Indiana,male,50,United States,married,higher,working class,Q221,0,4,2
+200,Wisconsin,female,26,United States,married,higher,lower middle class,Q221,0,4,2
+201,Virginia,male,40,United States,single,lower,lower class,Q221,0,4,3
+202,Oklahoma,female,25,United States,married,middle,lower middle class,Q221,0,4,2
+203,Missouri,male,48,United States,married,middle,lower middle class,Q221,0,4,2
+204,Connecticut,female,57,United States,married,middle,working class,Q221,0,4,2
+205,New Mexico,male,20,United States,single,middle,working class,Q221,0,4,2
+206,Florida,female,59,United States,married,higher,upper middle class,Q221,0,4,2
+207,Maryland,female,38,United States,single,higher,lower middle class,Q221,0,4,2
+208,New York,female,26,United States,single,higher,working class,Q221,0,4,2
+209,Michigan,male,39,United States,married,middle,working class,Q221,0,4,2
+210,New York,male,36,United States,married,middle,working class,Q221,0,4,2
+211,North Carolina,female,30,United States,single,higher,lower class,Q221,0,4,2
+212,Texas,female,24,United States,single,higher,lower class,Q221,0,4,2
+213,Oregon,male,65,United States,married,middle,working class,Q221,0,4,2
+214,Ohio,female,56,United States,married,middle,working class,Q221,0,4,2
+215,Ohio,male,31,United States,married,higher,lower middle class,Q221,0,4,2
+216,Ohio,male,28,United States,single,middle,working class,Q221,0,4,2
+217,Illinois,male,26,United States,single,middle,lower middle class,Q221,0,4,2
+218,Minnesota,male,48,United States,married,middle,upper middle class,Q221,0,4,2
+219,Tennessee,male,61,United States,married,middle,working class,Q221,0,4,2
+220,South Dakota,female,43,United States,married,higher,working class,Q221,0,4,2
+221,New York,male,57,United States,married,middle,lower middle class,Q221,0,4,2
+222,Colorado,male,42,United States,divorced,middle,lower middle class,Q221,0,4,2
+223,Massachusetts,female,59,United States,married,middle,upper middle class,Q221,0,4,2
+224,Oklahoma,female,31,United States,married,middle,working class,Q221,0,4,2
+225,Virginia,male,55,United States,single,middle,working class,Q221,0,4,2
+226,North Carolina,male,24,United States,single,middle,working class,Q221,0,4,2
+227,Maryland,female,23,United States,married,middle,working class,Q221,0,4,2
+228,Indiana,male,27,United States,single,middle,lower middle class,Q221,0,4,2
+229,New York,male,30,United States,married,middle,working class,Q221,0,4,2
+230,Michigan,female,26,United States,married,middle,working class,Q221,0,4,2
+231,Ohio,female,21,United States,married,middle,working class,Q221,0,4,2
+232,Nebraska,female,30,United States,married,higher,working class,Q221,0,4,2
+233,Pennsylvania,female,42,United States,married,higher,lower middle class,Q221,0,4,2
+234,Virginia,male,27,United States,married,middle,working class,Q221,0,4,2
+235,New York,male,56,United States,married,higher,upper middle class,Q221,0,4,2
+236,Kentucky,male,51,United States,married,higher,lower middle class,Q221,0,4,2
+237,Florida,male,51,United States,married,middle,lower middle class,Q221,0,4,2
+238,Tennessee,male,54,United States,married,middle,lower middle class,Q221,0,4,2
+239,Texas,male,34,United States,single,middle,lower class,Q221,0,4,2
+240,Florida,female,31,United States,married,middle,lower middle class,Q221,0,4,2
+241,Washington,female,39,United States,married,middle,working class,Q221,0,4,2
+242,Missouri,female,27,United States,married,lower,lower middle class,Q221,0,4,2
+243,Maine,male,40,United States,single,middle,lower middle class,Q221,0,4,2

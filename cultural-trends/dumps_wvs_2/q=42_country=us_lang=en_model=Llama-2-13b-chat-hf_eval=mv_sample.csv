@@ -1,0 +1,22 @@
+,persona.region,persona.sex,persona.age,persona.country,persona.marital_status,persona.education,persona.social_class,question.id,question.variant,response.id,response.answer
+0,North Carolina,male,42,United States,married,middle,lower middle class,Q42,0,4,2
+1,Tennessee,female,35,United States,married,middle,lower middle class,Q42,0,4,2
+2,Georgia,female,29,United States,married,higher,lower middle class,Q42,0,4,2
+3,Louisiana,female,30,United States,married,middle,lower class,Q42,0,4,2
+4,Pennsylvania,female,30,United States,divorced,lower,lower class,Q42,0,4,2
+5,Arizona,male,38,United States,married,middle,working class,Q42,0,4,2
+6,Michigan,female,35,United States,married,middle,lower class,Q42,0,4,2
+7,Louisiana,female,30,United States,married,middle,working class,Q42,0,4,2
+8,Florida,male,35,United States,married,higher,lower middle class,Q42,0,4,2
+9,California,male,35,United States,married,middle,lower middle class,Q42,0,4,2
+10,Arizona,female,20,United States,single,middle,upper middle class,Q42,0,4,2
+11,Mississippi,female,53,United States,widowed,middle,working class,Q42,0,4,2
+12,Maine,female,55,United States,married,middle,lower middle class,Q42,0,4,2
+13,Missouri,female,52,United States,married,middle,lower middle class,Q42,0,4,2
+14,Florida,female,48,United States,married,middle,lower middle class,Q42,0,4,2
+15,Wisconsin,male,62,United States,married,middle,working class,Q42,0,4,2
+16,New York,female,48,United States,divorced,lower,working class,Q42,0,4,2
+17,New York,male,57,United States,married,middle,lower middle class,Q42,0,4,2
+18,Oklahoma,female,31,United States,married,middle,working class,Q42,0,4,2
+19,Michigan,female,26,United States,married,middle,working class,Q42,0,4,2
+20,Missouri,female,27,United States,married,lower,lower middle class,Q42,0,4,2
