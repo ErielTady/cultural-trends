@@ -1,17 +1,14 @@
 #updated
 import os
-import time
 import torch
 import argparse
-import numpy as np
 
 from tqdm import tqdm
-from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM
 from transformers import BitsAndBytesConfig, AutoConfig
 
 from wvs_dataset import WVSDataset
-from utils import read_json, write_json
+from utils import read_json, write_json, parse_response_wvs
 
 from transformers.utils import logging
 logging.set_verbosity(50)
@@ -26,37 +23,6 @@ os.makedirs(OFFLOAD_DIR, exist_ok=True)
 #   load_in_8bit=True,
 #    llm_int8_enable_fp32_cpu_offload=True
 #)
-
-
-def generate(model, tokenizer, fewshot_cache, prompts, device, n_steps=20):
-    # generation cycle with 20 steps
-    step = 0
-    past_key_values = fewshot_cache
-    tokens = tokenizer(prompts, padding=True, return_tensors="pt").to(device)
-    input_ids = tokens["input_ids"]
-    output = None
-    while step < n_steps:
-        attention_mask = input_ids.new_ones(input_ids.shape)
-
-        if output is not None:
-            past_key_values = output["past_key_values"]
-
-        ids = model.prepare_inputs_for_generation(input_ids,
-                                                past=past_key_values,
-                                                attention_mask=attention_mask,
-                                                use_cache=True)
-
-        output = model(**ids)
-
-        # next_token = random.choice(torch.topk(output.logits[:, -1, :], top_k, dim=-1).indices[0])
-        next_token = output.logits[:, -1, :].argmax(dim=-1)
-
-        input_ids = torch.cat([input_ids, next_token.unsqueeze(-1)], dim=-1)
-
-        step += 1
-
-    return input_ids
-
 
 def query_hf(
     qid: str,
@@ -76,6 +42,7 @@ def query_hf(
     no_persona = False,
     subset = None,
     country: str = "egypt",
+    max_retries: int = 10,
 ):
 
     model_name_ = model_name.split("/")[-1]
@@ -162,131 +129,105 @@ def query_hf(
             print(f"> Trimming Dataset from {len(completions)}")
             dataset.trim_dataset(len(completions))
 
-        dataloader = DataLoader(dataset, batch_size=batch_size, num_workers=2, shuffle=False)
+        remaining_personas = len(dataset)
+        persona_entries = dataset.persona_qid[f"Q{qid}"]
+        question_entries = dataset.question_info[f"Q{qid}"]
 
         if fewshot > 0:
-
             fewshot_examples, _ = dataset.fewshot_examples()
-            fewshot_tokens = tokenizer(fewshot_examples, padding=True, return_tensors="pt").to(device)
-            with torch.no_grad():
-                fewshot_cache = model(**fewshot_tokens, use_cache=True)["past_key_values"]
+        else:
+            fewshot_examples = ""
 
-        index = 0
         print(f"> Prompting {model_name} with Q{qid}")
-        for batch_idx, prompts in tqdm(enumerate(dataloader), total=len(dataloader)):
 
-            if fewshot == 0:
-                tokens = tokenizer(prompts, padding=True, return_tensors="pt").to(device)
+        processed_offset = len(completions)
 
-                gen_outputs = model.generate(**tokens,
-                    temperature=0.0,
-                    do_sample=False,
-                    num_return_sequences=n_gen,
-                    max_new_tokens=max_tokens,
+        for local_idx in tqdm(range(remaining_personas)):
+            prompt_text = dataset[local_idx]
+            persona = persona_entries[local_idx]
+            q_info = question_entries[local_idx]
+
+            question_id = q_info["id"] if isinstance(q_info["id"], str) and q_info["id"].startswith("Q") else f"Q{q_info['id']}"
+            question_options = dataset.wvs_questions.get(question_id, {}).get("options", [])
+
+            attempt_log = []
+            invalid_attempts = []
+            collected_responses = []
+            valid_response_text = None
+
+            attempts_made = 0
+
+            while attempts_made < max_retries and valid_response_text is None:
+                attempts_made += 1
+
+                if fewshot_examples:
+                    full_prompt = fewshot_examples + prompt_text
+                else:
+                    full_prompt = prompt_text
+
+                tokens = tokenizer([full_prompt], padding=True, return_tensors="pt").to(device)
+
+                generation_kwargs = {
+                    "max_new_tokens": max_tokens,
+                    "temperature": temperature,
+                    "do_sample": (not greedy),
+                    "num_return_sequences": n_gen,
+                }
+
+                if not generation_kwargs["do_sample"] and n_gen > 1:
+                    generation_kwargs["num_beams"] = n_gen
+
+                with torch.no_grad():
+                    gen_outputs = model.generate(**tokens, **generation_kwargs)
+
+                generated_tokens = gen_outputs[:, tokens["input_ids"].shape[-1]:]
+                decoded_output = tokenizer.batch_decode(
+                    generated_tokens,
+                    skip_special_tokens=True,
+                    clean_up_tokenization_spaces=True,
                 )
-                decoded_output = tokenizer.batch_decode(gen_outputs, skip_special_tokens=True, clean_up_tokenization_spaces=True)
 
-                for b_i in range(0, len(decoded_output), n_gen):
-                    preds = decoded_output[b_i:b_i+n_gen]
-                    preds = [pred.replace(prompts[b_i//n_gen], "") for pred in preds]
-                    persona = dataset.persona_qid[f"Q{qid}"][index]
-                    q_info = dataset.question_info[f"Q{qid}"][index]
-                    index += 1
-                    completions += [{
-                        "persona": persona,
-                        "question": q_info,
-                        "response": preds,
-                    }]
+                for response_text in decoded_output:
+                    response_text = response_text.strip()
+                    collected_responses.append(response_text)
+                    parsed_value = parse_response_wvs(response_text, question_options)
+                    attempt_log.append({
+                        "attempt": attempts_made,
+                        "response": response_text,
+                        "parsed": parsed_value,
+                    })
+                    if parsed_value > 0 and valid_response_text is None:
+                        valid_response_text = response_text
+                        break
+                    if parsed_value <= 0 and response_text:
+                        invalid_attempts.append(response_text)
 
+            if valid_response_text is not None:
+                stored_responses = [valid_response_text]
             else:
+                stored_responses = collected_responses if collected_responses else ["No valid response after retries"]
+                print(
+                    f"> No valid response after {attempts_made} call(s) for persona index {processed_offset + local_idx}"
+                )
 
-                # prompts_with_fewshot = [fewshot_examples + prompt for prompt in prompts]
-                # tokens_with_fewshot = tokenizer(prompts_with_fewshot, padding=True, return_tensors="pt").to(device)
+            response_entries_checked = [
+                entry for entry in attempt_log if "response" in entry
+            ]
 
-                # start_time = time.time()
-                # gen_outputs_wo_cache = model.generate(**tokens_with_fewshot,
-                #     temperature=temperature,
-                #     do_sample=(not greedy),
-                #     num_return_sequences=n_gen,
-                #     max_new_tokens=max_tokens,
-                # )
-
-                # decoded_output = tokenizer.batch_decode(gen_outputs_wo_cache, skip_special_tokens=True, clean_up_tokenization_spaces=True)
-
-                # tokens = tokenizer(prompts, padding=True, return_tensors="pt").to(device)
-                # tokens["input_ids"] = tokens["input_ids"][:, 1:]
-                # tokens["attention_mask"] = tokens["attention_mask"][:, 1:]
-
-                # with torch.no_grad():
-                #     prompt_cache = model(**tokens_with_fewshot, past_key_values=fewshot_cache, use_cache=True)["past_key_values"]
-
-                # tokens_with_fewshot_concat = {
-                #     "input_ids": torch.cat([fewshot_tokens["input_ids"].repeat(batch_size, 1), tokens["input_ids"][:, 1:]], dim=1),
-                #     "attention_mask": torch.cat([fewshot_tokens["attention_mask"].repeat(batch_size, 1), tokens["attention_mask"][:, 1:]],dim=1),
-                #     # "attention_mask": torch.cat([fewshot_tokens["attention_mask"].repeat(batch_size, 1), tokens["attention_mask"][:, 1:], torch.ones(batch_size, 1).to(device)],dim=1),
-                # }
-
-                # tokens_with_fewshot_concat = {
-                #     "input_ids": torch.cat([fewshot_tokens["input_ids"].repeat(batch_size, 1), tokens["input_ids"]], dim=1),
-                #     "attention_mask": torch.cat([fewshot_tokens["attention_mask"].repeat(batch_size, 1), tokens["attention_mask"]],dim=1),
-                #     # "attention_mask": torch.cat([fewshot_tokens["attention_mask"].repeat(batch_size, 1), tokens["attention_mask"], torch.zeros(batch_size, 1).to(device)],dim=1),
-                # }
-
-                # num_layers = len(fewshot_cache)
-                # all_cache = []
-                # for layer_idx in range(num_layers):
-                #     all_cache += [(
-                #         torch.cat([fewshot_cache[layer_idx][0].repeat(batch_size*n_gen,1,1,1), prompt_cache[layer_idx][0].repeat(n_gen,1,1,1)[:,:,:-1,:]], dim=2),
-                #         torch.cat([fewshot_cache[layer_idx][1].repeat(batch_size*n_gen,1,1,1), prompt_cache[layer_idx][1].repeat(n_gen,1,1,1)[:,:,:-1,:]], dim=2),
-                #     )]
-                    # all_cache += [(
-                    #     torch.cat([fewshot_cache[layer_idx][0].repeat(batch_size*n_gen,1,1,1), prompt_cache[layer_idx][0].repeat(n_gen,1,1,1)], dim=2),
-                    #     torch.cat([fewshot_cache[layer_idx][1].repeat(batch_size*n_gen,1,1,1), prompt_cache[layer_idx][1].repeat(n_gen,1,1,1)], dim=2),
-                    # )]
-
-                # print("Fewshot Tokens + Prompt Tokens: ", fewshot_tokens["input_ids"].size(1) + tokens["input_ids"].size(1))
-                # print("[Fewshot, Prompt] Tokens: ", tokens_with_fewshot_concat["input_ids"].size(1))
-                # # print("(Fewshot + Prompt) Tokens: ", tokens_with_fewshot["input_ids"].size(1))
-                # print("Cache Concat: ", all_cache[0][0].size())
-                # print("[Fewshot, Prompt] Attention Mask: ", tokens_with_fewshot_concat["attention_mask"].size(1))
-                # breakpoint()
-                # # del prompt_cache
-
-                # tokens_with_fewshot["attention_mask"] = torch.cat([tokens_with_fewshot["attention_mask"], torch.ones(batch_size,1).to(device)], dim=1)
-
-                # # start_time = time.time()
-                # gen_outputs = model.generate(**tokens_with_fewshot_concat,
-                #     # input_ids=tokens_with_fewshot_concat["input_ids"],
-                #     temperature=temperature,
-                #     do_sample=(not greedy),
-                #     num_return_sequences=n_gen,
-                #     max_new_tokens=max_tokens,
-                #     past_key_values=tuple(all_cache)
-                # )
-
-                gen_outputs = generate(model, tokenizer, fewshot_cache, prompts, device, n_steps=max_tokens)
-
-                # gen_outputs = model.generate(**tokens_with_fewshot_concat,
-                #     temperature=temperature,
-                #     do_sample=(not greedy),
-                #     num_return_sequences=n_gen,
-                #     max_new_tokens=max_tokens,
-                #     past_key_values=tuple(all_cache)
-                # )
-
-                decoded_output = tokenizer.batch_decode(gen_outputs, skip_special_tokens=True, clean_up_tokenization_spaces=True)
-
-                for b_i in range(0, len(decoded_output), n_gen):
-                    preds = decoded_output[b_i:b_i+n_gen]
-                    preds = [pred.replace(fewshot_examples, "").replace(prompts[b_i//n_gen], "") for pred in preds]
-                    persona = dataset.persona_qid[f"Q{qid}"][index]
-                    q_info = dataset.question_info[f"Q{qid}"][index]
-                    index += 1
-                    completions += [{
-                        "persona": persona,
-                        "question": q_info,
-                        "response": preds,
-                    }]
+            completions += [{
+                "persona": persona,
+                "question": q_info,
+                "response": stored_responses,
+                "attempt_log": attempt_log,
+                "invalid_attempts": invalid_attempts,
+                "attempt_summary": {
+                    "attempts_made": attempts_made,
+                    "max_retries": max_retries,
+                    "n_gen": n_gen,
+                    "valid": valid_response_text is not None,
+                    "responses_checked": len(response_entries_checked),
+                },
+            }]
 
             write_json(preds_path, completions)
 
@@ -317,6 +258,7 @@ if __name__ == "__main__":
     parser.add_argument('--cuda', default=0, type=int, help='cuda device number')
     parser.add_argument('--greedy', action="store_true", help='greedy decoding')
     parser.add_argument('--country', type=str, help='country')
+    parser.add_argument('--max-retries', default=10, type=int, help='maximum number of generation attempts per sample')
 
     args = parser.parse_args()
 
@@ -339,5 +281,6 @@ if __name__ == "__main__":
         cuda=args.cuda,
         greedy=args.greedy,
         country=args.country,
+        max_retries=int(args.max_retries),
     )
     ##updated
