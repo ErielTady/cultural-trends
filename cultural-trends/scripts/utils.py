@@ -513,8 +513,10 @@ def convert_to_dataframe(
               if response_int <= 0:
                   invalid_count += 1
               else:
-              # Append the one and break (ignoring the other 4 generations)
-                  model_data_flat = append_response(model_data_flat, row, response_int, response_id, row_idx, q_responses=None)
+                  # Append the one and break (ignoring the other 4 generations)
+                  model_data_flat = append_response(
+                      model_data_flat, row, response_int, response_id, row_idx, q_responses=None
+                  )
               break
 
           if eval_method == "flatten":

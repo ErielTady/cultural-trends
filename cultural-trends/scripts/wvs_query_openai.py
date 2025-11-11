@@ -3,7 +3,7 @@ import argparse
 import pandas as pd
 from tqdm import tqdm
 from wvs_dataset import WVSDataset
-from utils import read_json, write_json, retry_request, read_file
+from utils import read_json, write_json, retry_request, read_file, parse_response_wvs
 
 API_KEY = os.getenv("OPENAI_API_SOCIAL")
 API_ORG = os.getenv("OPENAI_ORG_SOCIAL")
@@ -29,6 +29,7 @@ def query_question(
     no_persona: bool = False,
     subset = None,
     use_anthro: bool = False,
+    max_retries: int = 10,
 ):
     qid = int(qid)
     filepath = f"../dataset/wvs_template.{lang}.yml"
@@ -100,24 +101,92 @@ def query_question(
 
         for index in tqdm(range(start_idx, max_gens)):
             payload_data, persona, q_info = dataset[index]
-            payload = {"messages": [payload_data], "max_tokens": max_tokens,
-                    "temperature": temperature, "model": model_name, "n": n_gen}
-            
-            response = retry_request(url, payload, api_headers)
+            question_id = q_info["id"] if isinstance(q_info["id"], str) and q_info["id"].startswith("Q") else f"Q{q_info['id']}"
+            question_options = dataset.wvs_questions.get(question_id, {}).get("options", [])
 
-            if "choices" in response:
+            attempt_log = []
+            collected_responses = []
+            valid_response_text = None
+            aggregated_usage = {}
+            calls_made = 0
+
+            for attempt_idx in range(max_retries):
+                payload = {
+                    "messages": [payload_data],
+                    "max_tokens": max_tokens,
+                    "temperature": temperature,
+                    "model": model_name,
+                    "n": n_gen,
+                }
+
+                response = retry_request(url, payload, api_headers)
+                calls_made += 1
+
+                usage_dict = response.get("usage")
+                if isinstance(usage_dict, dict):
+                    for key, value in usage_dict.items():
+                        if isinstance(value, (int, float)):
+                            aggregated_usage[key] = aggregated_usage.get(key, 0) + value
+
+                if "choices" not in response:
+                    attempt_log.append({
+                        "attempt": attempt_idx + 1,
+                        "error": response,
+                    })
+                    continue
+
                 answers = [choice["message"]["content"].strip() for choice in response["choices"]]
-                completions += [{
-                    "persona": persona,
-                    "question": q_info,
-                    "response": answers,
-                }]
-                usage += [response["usage"]]
+
+                for answer_text in answers:
+                    collected_responses.append(answer_text)
+                    parsed_value = parse_response_wvs(answer_text, question_options)
+                    attempt_log.append({
+                        "attempt": attempt_idx + 1,
+                        "response": answer_text,
+                        "parsed": parsed_value,
+                    })
+                    if parsed_value > 0:
+                        valid_response_text = answer_text
+                        break
+
+                if valid_response_text is not None:
+                    break
+
+            if valid_response_text is not None:
+                stored_responses = [valid_response_text]
             else:
-                print("> Error!")
-                completions += [{"Error": response}]
-                usage += [{"Error": 0}]
-                
+                stored_responses = collected_responses if collected_responses else ["No valid response after retries"]
+                print(
+                    f"> No valid response after {calls_made} call(s) for persona index {index}"
+                )
+
+            invalid_attempts = [
+                log_entry["response"]
+                for log_entry in attempt_log
+                if "response" in log_entry and log_entry.get("parsed", 0) <= 0
+            ]
+
+            completions += [{
+                "persona": persona,
+                "question": q_info,
+                "response": stored_responses,
+                "attempt_log": attempt_log,
+                "invalid_attempts": invalid_attempts,
+                "attempt_summary": {
+                    "calls_made": calls_made,
+                    "max_retries": max_retries,
+                    "n_gen": n_gen,
+                    "valid": valid_response_text is not None,
+                    "responses_checked": len([
+                        log_entry
+                        for log_entry in attempt_log
+                        if "response" in log_entry
+                    ]),
+                },
+            }]
+
+            usage.append(aggregated_usage)
+
             write_json(preds_path, completions)
             write_json(usage_path, usage)
 
@@ -134,10 +203,11 @@ if __name__ == "__main__":
     parser.add_argument('--country', default="egypt", choices=["egypt", "us"], help='country')
     parser.add_argument('--max-tokens', default=10, type=int, help='maximum number of output tokens')
     parser.add_argument('--temperature', default=0.7, type=float, help='temperature')
-    parser.add_argument('--n-gen', default=5, type=int, help='number of generations')
+    parser.add_argument('--n-gen', default=5, type=int, help='number of generations per API call')
     parser.add_argument('--no-persona', default=False, action='store_true', help='whether to use persona')
     parser.add_argument('--use-anthro', default=False, action='store_true', help='whether to use anthro prompting')
     parser.add_argument('--subset', default=None, type=int, help='choose quartile', choices=[1,2,3,4])
+    parser.add_argument('--max-retries', default=10, type=int, help='maximum number of API calls when no valid answer is found')
 
     args = parser.parse_args()
 
@@ -152,5 +222,6 @@ if __name__ == "__main__":
         n_gen=int(args.n_gen),
         no_persona=args.no_persona,
         subset=args.subset,
-        use_anthro=args.use_anthro
+        use_anthro=args.use_anthro,
+        max_retries=int(args.max_retries),
     )
